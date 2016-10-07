@@ -51,7 +51,15 @@ class Scan extends CI_Controller {
     }
     
     function exportExcel(){
+        $auth   = new Auth();
+        $auth->restrict();
         
+        //$auth->cek_menu(14);
+        
+        //define('FPDF_FONTPATH',$this->config->item('fonts_path'));
+        //$data = $this->record->exportExcel($_GET['nilai']);
+        $data = $this->record->exportExcel();
+        $this->load->view('v_export_excel.php',$data);
     }
     //////////////////////////////////
     function update()

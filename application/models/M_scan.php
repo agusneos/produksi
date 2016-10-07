@@ -126,8 +126,49 @@ class M_scan extends CI_Model
     }
     
     function exportExcel(){
+        $sql = 'SELECT t_po_detail_item, t_process_shif, m_machine_lines, m_machine_mac, t_po_detail_no, t_prod_lot, CONCAT_WS("-",t_prod_lot, t_prod_sublot) AS nolot,
+                COUNT(t_prod_sublot) AS qtybox, SUM(t_process_qty) AS qtypcs, ROUND((SUM(t_process_qty)*m_process_weight)/1000,1) AS qtyberat
+                FROM `t_process`
+                LEFT JOIN t_prod ON t_process_prod_id = t_prod_id
+                LEFT JOIN t_po_detail ON t_prod_lot = t_po_detail_lot_no
+                LEFT JOIN m_machine ON t_process_machine = m_machine_id
+                LEFT JOIN m_process ON CONCAT_WS("-",t_po_detail_item, t_process_cat) = CONCAT_WS("-",m_process_id, m_process_proc_cat_id)
+                WHERE t_process_cat=16
+                GROUP BY(nolot)';
         
+        $query  = $this->db->query($sql);
+        
+       // $tgl = $this->db->query('SELECT "'.$date.'" as Tanggal');
+        
+        $result = array();
+	//$result['date'] = $tgl;
+	$result['rows'] = $query;
+        
+        return $result;
     }
+    
+    function exportExcel_a(){
+        $this->db->select('t_po_detail_item, t_process_shif, m_machine_lines, m_machine_mac, t_po_detail_no,
+                           t_prod_lot, CONCAT(t_prod_lot, "-", t_prod_sublot) AS nolot,
+                           COUNT(t_prod_sublot) AS qtybox, SUM(t_process_qty) AS qtypcs,
+                           ROUND((SUM(t_process_qty)*m_process_weight)/1000,1) AS qtyberat', FALSE);
+        $this->db->join(self::$table2, 't_process_prod_id = t_prod_id', 'left')
+                 ->join(self::$table3, 't_prod_lot = t_po_detail_lot_no', 'left')
+                 ->join(self::$table5, 't_process_machine = m_machine_id', 'left')
+                 ->join(self::$table4, 'CONCAT_WS("-",t_po_detail_item, t_process_cat) = CONCAT_WS("-",m_process_id, m_process_proc_cat_id)', 'left', FALSE);
+        $this->db->where('t_process_cat', 16);
+        $this->db->group_by('nolot');
+        $query  = $this->db->get(self::$table1);
+        
+       // $tgl = $this->db->query('SELECT "'.$date.'" as Tanggal');
+        
+        $result = array();
+	//$result['date'] = $tgl;
+	$result['rows'] = $query;
+        
+        return $result;
+    }
+    
     ////////////////////////////////
     function update($t_po_header_no_old, $t_po_header_no, $t_po_header_cust, $t_po_header_date)
     {
