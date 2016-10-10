@@ -46,6 +46,72 @@
     </script>
     
     <script type="text/javascript">
+        function update(){
+            var c = $('#isi');
+            var p = c.layout('panel','center');
+            p.panel({
+                href:'<?php echo site_url('scan/viewupdate'); ?>',
+                onLoad:function(){
+                    $('#afterKg').textbox('disable');
+                    $('#scanId').next().find('input').focus();
+                    $('#scanId').textbox('textbox').keypress(function(e){
+                        if (e.keyCode == 13){
+                            var scId    = $('#scanId').textbox('getValue');
+                            $.post('<?php echo site_url('scan/cardCheck'); ?>',{scId:scId},function(result){
+                                if (result.success){
+                                    $('#afterKg').textbox('enable');
+                                    $('#afterKg').next().find('input').focus();
+                                    $('#currentKg').textbox('setValue', result.current);
+                                    $('#grPcs').textbox('setValue', result.grpcs);
+                                    $('#idPros').textbox('setValue', result.prosid);
+                                }
+                                else{
+                                    var win = $.messager.alert('Error','Gagal !'+('<br/>')+'Data Tidak Ditemukan'+('<br/>'),'error', function(){
+                                        $('#afterKg').textbox('disable');
+                                        $('#scanId').textbox('setValue', '');
+                                        $('#currentKg').textbox('setValue', '');
+                                        $('#afterKg').textbox('setValue', '');
+                                        $('#grPcs').textbox('setValue', '');
+                                        $('#idPros').textbox('setValue', '');
+                                        $('#scanId').next().find('input').focus();
+                                    });
+                                    win.window('window').addClass('bg-error');
+                                }
+                            },'json');
+                        }
+                    });
+                    $('#afterKg').textbox('textbox').keypress(function(e){
+                        if (e.keyCode == 13){
+                            var idPros  = $('#idPros').textbox('getValue');
+                            var grPcs   = $('#grPcs').textbox('getValue');
+                            var afterKg = $('#afterKg').textbox('getValue');
+                            $.post('<?php echo site_url('scan/update'); ?>',{idPros:idPros,grPcs:grPcs,afterKg:afterKg},function(result){
+                                if (result.success){
+                                    $.messager.show({
+                                        title   : 'Info',
+                                        msg     : '<div class="messager-icon messager-info"></div><div>Data Berhasil Diubah</div>'
+                                    });                            
+                                }
+                                else{
+                                    var win = $.messager.alert('Error','Gagal !'+('<br/>')+result.error,'error', function(){
+                                        $('#scanId').next().find('input').focus();
+                                    });
+                                    win.window('window').addClass('bg-error');
+                                }
+                                $('#scanId').textbox('setValue', '');
+                                $('#afterKg').textbox('setValue', '');
+                                $('#currentKg').textbox('setValue', '');
+                                $('#grPcs').textbox('setValue', '');
+                                $('#idPros').textbox('setValue', '');
+                                $('#afterKg').textbox('disable');
+                                $('#scanId').next().find('input').focus();
+                            },'json');
+                        }
+                    });
+                }
+            });    
+        }
+        
         function scan(){
             var c = $('#isi');
             var p = c.layout('panel','center');
@@ -192,7 +258,7 @@
                 <div data-options="region:'west'" style="width:5%">
                     <div id="titlebar" style="padding:2px">
                         <a href="javascript:scan()" class="easyui-linkbutton" style="width:100%" data-options="iconCls:'icon-qrcode',size:'large',iconAlign:'top'">SCAN</a>
-                        <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100%" data-options="iconCls:'icon-large-chart',size:'large',iconAlign:'top'">REPORT</a>
+                        <a href="javascript:update(0)" class="easyui-linkbutton" style="width:100%" data-options="iconCls:'icon-large-smartart',size:'large',iconAlign:'top'">UPDATE</a>
                         <a href="<?php echo site_url('main/logout'); ?>" class="easyui-linkbutton" style="width:100%" data-options="iconCls:'icon-large_logout',size:'large',iconAlign:'top'">LOGOUT</a>
                     </div>
                 </div>

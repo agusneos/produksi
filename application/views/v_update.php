@@ -45,19 +45,22 @@
         }
     </style>
 <div data-options="region:'center'">
-    <div class="easyui-panel" title="SCAN" data-options="style:{margin:'15% auto'}" style="width:400px;padding:30px 30px 20px 80px">
+    <div class="easyui-panel" title="UPDATE" data-options="style:{margin:'15% auto'}" style="width:400px;padding:30px 30px 20px 80px">
         <form id="form-scan" method="post" novalidate onsubmit="return false">
             <div style="font-size:20px;margin-bottom:20px">
-                <input id="shifId" name="shifId" class="easyui-numberbox" data-options="min:1,max:3" label="SHIF" labelPosition="left" style="width:80%;height:40px;padding:12px" tabindex="1">
+                <input id="scanId" name="scanId" class="easyui-numberbox" label="KARTU" labelPosition="left" style="width:80%;height:40px;padding:12px" tabindex="1">
             </div>
             <div style="font-size:20px;margin-bottom:20px">
-                <input id="lineId" name="lineId" class="easyui-numberbox" label="LINE" labelPosition="left" style="width:80%;height:40px;padding:12px" tabindex="2">
+                <input id="idPros" name="idPros" class="easyui-numberbox" label="Proses Id" labelPosition="left" data-options="min:0,precision:0" style="width:80%;height:40px;padding:12px" readonly>
             </div>
             <div style="font-size:20px;margin-bottom:20px">
-                <input id="machId" name="machId" class="easyui-numberbox" label="MESIN" labelPosition="left" style="width:80%;height:40px;padding:12px" tabindex="3">
+                <input id="currentKg" name="currentKg" class="easyui-numberbox" label="Before" labelPosition="left" data-options="min:0,precision:2" style="width:80%;height:40px;padding:12px" readonly><a> Kg</a>
             </div>
             <div style="font-size:20px;margin-bottom:20px">
-                <input id="scanId" name="scanId" class="easyui-numberbox" label="KARTU" labelPosition="left" style="width:80%;height:40px;padding:12px" tabindex="4">
+                <input id="grPcs" name="grPcs" class="easyui-numberbox" label="Gr/Pcs" labelPosition="left" data-options="min:0,precision:2" style="width:80%;height:40px;padding:12px" readonly><a> Gr</a>
+            </div>
+            <div style="font-size:20px;margin-bottom:20px">
+                <input id="afterKg" name="afterKg" class="easyui-numberbox" label="After" labelPosition="left" data-options="min:0,precision:2" style="width:80%;height:40px;padding:12px" tabindex="2"><a> Kg</a>
             </div>
         </form>
     </div>
@@ -70,5 +73,5 @@
  
 </html>
 
-<!-- End of file v_scan.php -->
-<!-- Location: ./application/views/v_scan.php -->
+<!-- End of file v_update.php -->
+<!-- Location: ./application/views/v_update.php -->
